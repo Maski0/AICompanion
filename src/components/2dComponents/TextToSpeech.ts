@@ -8,6 +8,7 @@ export class AzureTTS {
     private _ttsregion: string;
 
     private _inProgress: boolean;
+    public messages: string[];
 
 
     constructor(){

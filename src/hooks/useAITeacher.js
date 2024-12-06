@@ -16,13 +16,7 @@ export const useAITeacher = create((set, get) => ({
     }));
   },
   loading: false,
-  english: true,
-  setEnglish: (english) => {
-    set(() => ({
-      english,
-    }));
-  },
-
+  
   askAI: async (question,customSystemprompt) => {
     if (!question) {
       return;

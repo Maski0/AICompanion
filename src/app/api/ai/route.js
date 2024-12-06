@@ -6,7 +6,6 @@ const openai = new OpenAI({
 
 export async function GET(req) {
   // WARNING: Do not expose your keys
-  // WARNING: If you host publicly your project, add an authentication layer to limit the consumption of ChatGPT resources
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [

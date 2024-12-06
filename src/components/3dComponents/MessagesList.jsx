@@ -5,7 +5,6 @@ export const MessagesList = () => {
   const messages = useAITeacher((state) => state.messages);
   const playMessage = useAITeacher((state) => state.playMessage);
   const { currentMessage } = useAITeacher();
-  const english = useAITeacher((state) => state.english);
   const classroom = useAITeacher((state) => state.classroom);
 
   const container = useRef();
@@ -17,14 +16,10 @@ export const MessagesList = () => {
     });
   }, [messages.length]);
 
-  const renderEnglish = (englishText) => (
-    <>
-      {english && (
-        <p className="text-4xl inline-block px-2 rounded-sm font-bold bg-clip-text text-transparent bg-gradient-to-br from-blue-300/90 to-white/90">
-          {englishText}
-        </p>
-      )}
-    </>
+  const render = (englishText) => (
+    <p className="text-4xl inline-block px-2 rounded-sm font-bold bg-clip-text text-transparent bg-gradient-to-br from-blue-300/90 to-white/90">
+      {englishText}
+    </p>
   );
 
   return (
@@ -53,7 +48,7 @@ export const MessagesList = () => {
                 <span
                   className={`text-white/90 text-2xl font-bold uppercase px-3 py-1 rounded-full bg-teal-600`}
                 />
-                {renderEnglish(message.answer.response)}
+                {render(message.answer.response)}
               </div>
             </div>
             {currentMessage === message ? (
