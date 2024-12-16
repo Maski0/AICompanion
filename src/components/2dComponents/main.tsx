@@ -8,7 +8,14 @@ import { LAppGlManager } from "./lappglmanager";
 
 const Live2DComponent = () => {
   // Function to validate and trigger TTS
-
+  useEffect(() => {
+    const live2dCanvas = document.getElementById("live2dCanvas");
+    if (live2dCanvas) {
+      if (live2dCanvas.style.display === "none") {
+        live2dCanvas.style.display = "block";
+      }
+    }
+  }, []);
   const validateRequest = () => {
     LAppDelegate.getInstance().startVoiceRelayTTS();
   };
@@ -24,10 +31,10 @@ const Live2DComponent = () => {
       //   console.log("in GL !!!");
       //   // Lose WebGL context
       //   gl.getExtension("WEBGL_lose_context")?.loseContext();
-        
+
       //   // Clear canvas
       //   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        
+
       //   // Reset canvas dimensions
       //   canvas.width = 0;
       //   canvas.height = 0;
@@ -58,7 +65,7 @@ const Live2DComponent = () => {
     window.addEventListener(
       "beforeunload",
       () => LAppDelegate.releaseInstance(),
-      { passive: true }
+      { passive: true },
     );
 
     // Handle window resize
@@ -72,12 +79,11 @@ const Live2DComponent = () => {
     // Clean up event listeners on component unmount
     return () => {
       window.removeEventListener("beforeunload", () =>
-        LAppDelegate.releaseInstance()
-    );
-    window.removeEventListener("resize", handleResize);
-    //LAppDelegate.releaseInstance()
-    canvascleanUp();
-      
+        LAppDelegate.releaseInstance(),
+      );
+      window.removeEventListener("resize", handleResize);
+      //LAppDelegate.releaseInstance()
+      canvascleanUp();
     };
   }, []);
 

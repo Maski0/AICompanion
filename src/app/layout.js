@@ -1,7 +1,9 @@
 import { Noto_Sans_JP, Roboto } from "next/font/google";
 import "./globals.css";
-import { Suspense } from 'react'
-import { NavigationEvents } from '@/components/navigation-events'
+import { Suspense } from "react";
+
+import { NavigationEvents } from "@/components/navigation-events";
+import Script from "next/script";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,12 +27,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${roboto.variable} ${notoSansJP.variable}`}>
       <body className={roboto.className}>
+        <Script src="/live2dcubismcore.js" strategy="beforeInteractive" />
         {children}
         <Suspense fallback={null}>
           <NavigationEvents />
         </Suspense>
       </body>
-
     </html>
   );
 }
