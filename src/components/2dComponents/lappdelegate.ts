@@ -251,10 +251,6 @@ export class LAppDelegate {
     return this._textureManager;
   }
 
-  public startVoiceRelayTTS() {
-    LAppLive2DManager.getInstance().startVoiceRelayTTS();
-  }
-
   /**
    * コンストラクタ
    */

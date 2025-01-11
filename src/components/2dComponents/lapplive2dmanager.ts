@@ -5,15 +5,15 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-import { CubismMatrix44 } from '@/Framework/math/cubismmatrix44';
-import { ACubismMotion } from '@/Framework/motion/acubismmotion';
-import { csmVector } from '@/Framework/type/csmvector';
+import { CubismMatrix44 } from "@/Framework/math/cubismmatrix44";
+import { ACubismMotion } from "@/Framework/motion/acubismmotion";
+import { csmVector } from "@/Framework/type/csmvector";
 
-import * as LAppDefine from './lappdefine';
-import { canvas } from './lappglmanager';
-import { LAppModel } from './lappmodel';
-import { LAppPal } from './lapppal';
-import { AzureTTS } from './TextToSpeech';
+import * as LAppDefine from "./lappdefine";
+import { canvas } from "./lappglmanager";
+import { LAppModel } from "./lappmodel";
+import { LAppPal } from "./lapppal";
+import { AzureTTS } from "./TextToSpeech";
 
 export let s_instance: LAppLive2DManager = null;
 
@@ -110,7 +110,6 @@ export class LAppLive2DManager {
           );
         }
         this._models.at(i).setRandomExpression();
-        
       } else if (this._models.at(i).hitTest(LAppDefine.HitAreaNameBody, x, y)) {
         if (LAppDefine.DebugLogEnable) {
           LAppPal.printMessage(
@@ -128,37 +127,21 @@ export class LAppLive2DManager {
     }
   }
 
-  public startVoiceRelayTTS(){
+  public startLiveLipSync(url : string) {
     for (let i = 0; i < this._models.getSize(); i++) {
-      if (LAppDefine.DebugLogEnable) {
-        LAppPal.printMessage(
-          `starting Voice TTS `
-        );
-        console.log(`starting Voice TTS `);
-      }
-      const sentance: string = (document.getElementById("prompt") as any).value;
-      const language: string = "en-US";
-      if(sentance.trim().length === 0){
-        if (LAppDefine.DebugLogEnable) {
-          LAppPal.printMessage(
-            `No Text to Translate!`
-          );
-        }
-        return;
-      }
-      const azureTTS = new AzureTTS();
-      azureTTS.GetSpeech(language,sentance).then(url =>{
-        console.log("url: " + url);
-        this._models.at(i)._wavFileHandler.start(url);
-        // this._models
-        //   .at(i)
-        //   .startRandomMotion(
-        //     LAppDefine.MotionGroupTapBody,
-        //     LAppDefine.PriorityNormal,
-        //     this._finishedMotion
-        //   );
-        this._models.at(i).setRandomExpression();
-      });
+      console.log("url: " + url);
+      const audio: any = document.getElementById('voice');
+      audio.src = url;
+      this._models.at(i).ResetAudioSrc();
+      this._models.at(i)._wavFileHandler.start(url);
+      // this._models
+      //   .at(i)
+      //   .startRandomMotion(
+      //     LAppDefine.MotionGroupTapBody,
+      //     LAppDefine.PriorityNormal,
+      //     this._finishedMotion
+      //   );
+      this._models.at(i).setRandomExpression();
     }
   }
 
@@ -218,9 +201,9 @@ export class LAppLive2DManager {
     // model3.jsonのパスを決定する。
     // ディレクトリ名とmodel3.jsonの名前を一致させておくこと。
     const model: string = LAppDefine.ModelDir[index];
-    const modelPath: string = LAppDefine.ResourcesPath + model + '/';
+    const modelPath: string = LAppDefine.ResourcesPath + model + "/";
     let modelJsonName: string = LAppDefine.ModelDir[index];
-    modelJsonName += '.model3.json';
+    modelJsonName += ".model3.json";
 
     this.releaseAllModel();
     this._models.pushBack(new LAppModel());
@@ -248,7 +231,7 @@ export class LAppLive2DManager {
   _sceneIndex: number; // 表示するシーンのインデックス値
   // モーション再生終了のコールバック関数
   _finishedMotion = (self: ACubismMotion): void => {
-    LAppPal.printMessage('Motion Finished:');
+    LAppPal.printMessage("Motion Finished:");
     console.log(self);
   };
 }

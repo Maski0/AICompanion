@@ -1,12 +1,43 @@
 "use client";
 
 // Import necessary libraries
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LAppDelegate } from "./lappdelegate";
 import * as LAppDefine from "./lappdefine";
 import { LAppGlManager } from "./lappglmanager";
+import ChatBox from "./Chatbox";
+import { Message } from "@/lib/types";
+import { useSpeechHandler } from "./SpeechHandler";
+import { LAppLive2DManager } from "./lapplive2dmanager";
 
 const Live2DComponent = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const { generateSpeech, isLoading, error } = useSpeechHandler(
+    "e0e10e6f-ff2b-0d4c-8011-1fc1eee7cb32"
+  );
+  const handleSendMessage = async (content: string) => {
+    if (!content.trim()) return;
+    // Add the user's message
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now().toString(), content, sender: "user" },
+    ]);
+
+    // Simulate bot response
+    const response = await generateSpeech(content);
+    if (response) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: response.timestamp.toString(),
+          content: response.text,
+          sender: "bot",
+          audioURL: response.audioUrl,
+        },
+      ]);
+    }
+    StartAudioLipSync(response.audioUrl);
+  };
   // Function to validate and trigger TTS
   useEffect(() => {
     const live2dCanvas = document.getElementById("live2dCanvas");
@@ -16,8 +47,8 @@ const Live2DComponent = () => {
       }
     }
   }, []);
-  const validateRequest = () => {
-    LAppDelegate.getInstance().startVoiceRelayTTS();
+  const StartAudioLipSync = (url: string) => {
+    LAppLive2DManager.getInstance().startLiveLipSync(url);
   };
 
   const canvascleanUp = () => {
@@ -26,19 +57,6 @@ const Live2DComponent = () => {
     if (canvas) {
       const gl = canvas.getContext("webgl2");
       console.log(gl);
-      console.log("First in if !!!");
-      // if (gl) {
-      //   console.log("in GL !!!");
-      //   // Lose WebGL context
-      //   gl.getExtension("WEBGL_lose_context")?.loseContext();
-
-      //   // Clear canvas
-      //   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-      //   // Reset canvas dimensions
-      //   canvas.width = 0;
-      //   canvas.height = 0;
-      // }
     }
   };
 
@@ -51,10 +69,6 @@ const Live2DComponent = () => {
       ) {
         return;
       }
-
-      // const submitButton = document.getElementById("startTTS");
-      // submitButton?.addEventListener("click", validateRequest);
-
       LAppDelegate.getInstance().run();
     };
 
@@ -65,7 +79,7 @@ const Live2DComponent = () => {
     window.addEventListener(
       "beforeunload",
       () => LAppDelegate.releaseInstance(),
-      { passive: true },
+      { passive: true }
     );
 
     // Handle window resize
@@ -79,7 +93,7 @@ const Live2DComponent = () => {
     // Clean up event listeners on component unmount
     return () => {
       window.removeEventListener("beforeunload", () =>
-        LAppDelegate.releaseInstance(),
+        LAppDelegate.releaseInstance()
       );
       window.removeEventListener("resize", handleResize);
       //LAppDelegate.releaseInstance()
@@ -90,7 +104,7 @@ const Live2DComponent = () => {
   return (
     <>
       <canvas id="live2dCanvas" className="absolute inset-0 w-full h-full" />
-      <div className="z-10 md:justify-center fixed bottom-4 left-4 right-4 flex gap-3 flex-wrap justify-stretch">
+      {/* <div className="z-10 md:justify-center fixed bottom-4 left-4 right-4 flex gap-3 flex-wrap justify-stretch">
         <div className="z-10 max-w-[600px] flex space-y-6 flex-col bg-gradient-to-tr  from-slate-300/30 via-gray-400/30 to-slate-600-400/30 p-4  backdrop-blur-md rounded-xl border-slate-100/30 border">
           <audio id="voice" />
           <div className="gap-3 flex">
@@ -108,6 +122,11 @@ const Live2DComponent = () => {
             </button>
           </div>
         </div>
+      </div> */}
+      <div className="z-30">
+        <audio id="voice" autoFocus/>
+        <ChatBox messages={messages} onSendMessage={handleSendMessage} isloading= {isLoading}/>
+        {error && <p className="text-red-500 text-sm px-4 py-2">{error}</p>}
       </div>
     </>
   );

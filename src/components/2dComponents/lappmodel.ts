@@ -582,15 +582,19 @@ export class LAppModel extends CubismUserModel {
     if (this._pose != null) {
       this._pose.updateParameters(this._model, deltaTimeSeconds);
     }
-    const audio: any = document.getElementById('voice');
+    const audio: HTMLAudioElement = document.getElementById('voice') as HTMLAudioElement;
     if(audio != null){
       if (audio.src !== this._audioSrc) {
+        console.log("this is playing !!");
         this._audioSrc = audio.src;
         audio.play();
       }
     }
 
     this._model.update();
+  }
+  public ResetAudioSrc(){
+    this._audioSrc = null;
   }
 
   /**
