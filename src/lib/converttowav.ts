@@ -8,6 +8,7 @@ export const convertToWav = async (
   audioBlob: Blob,
   sampleRate: number
 ): Promise<Blob> => {
+  const startTime = performance.now();
   // Create an AudioContext for decoding
   const audioContext = new AudioContext({ sampleRate });
 
@@ -16,7 +17,8 @@ export const convertToWav = async (
 
   // Decode the audio data
   const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
+  const endTime = performance.now();
+  console.log(`Conversion took ${(endTime - startTime).toFixed(2)} ms`);
   // Extract PCM data and format it into a WAV
   return createWavBlob(audioBuffer);
 };
