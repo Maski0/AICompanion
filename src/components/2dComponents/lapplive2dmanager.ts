@@ -13,7 +13,6 @@ import * as LAppDefine from "./lappdefine";
 import { canvas } from "./lappglmanager";
 import { LAppModel } from "./lappmodel";
 import { LAppPal } from "./lapppal";
-import { AzureTTS } from "./TextToSpeech";
 
 export let s_instance: LAppLive2DManager = null;
 
