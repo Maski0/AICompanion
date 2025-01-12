@@ -8,8 +8,8 @@
 
 2D:
 
-- Live2D Cubism , Azure TTs
-  > (Still need to add Open AI, And Alot of bugs regarding route changes, if we change route refresh the page)
+- Live2D Cubism , Elize (Eliza provided AI, ElevenLabs)
+##
 
 ## Custom Endpoint in Eliza Framework
 
