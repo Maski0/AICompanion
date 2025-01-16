@@ -118,12 +118,24 @@ export class LAppLive2DManager {
         this._models
           .at(i)
           .startRandomMotion(
-            LAppDefine.MotionGroupTapBody,
+            LAppDefine.MotionGroupIdle,
             LAppDefine.PriorityNormal,
             this._finishedMotion
           );
       }
     }
+  }
+  public TestMotion() {
+    for (let i = 0; i < this._models.getSize(); i++) {
+      this._models
+      .at(i)
+      .startRandomMotion(
+        "",
+        LAppDefine.PriorityNormal,
+        this._finishedMotion
+      );
+    }
+    console.log("thhhhh")
   }
 
   public startLiveLipSync(url : string) {

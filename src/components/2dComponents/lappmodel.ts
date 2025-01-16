@@ -371,6 +371,7 @@ export class LAppModel extends CubismUserModel {
 
       for (let i = 0; i < lipSyncIdCount; ++i) {
         this._lipSyncIds.pushBack(this._modelSetting.getLipSyncParameterId(i));
+        console.log( this._modelSetting.getLipSyncParameterId(i))
       }
       this._state = LoadStep.SetupLayout;
 

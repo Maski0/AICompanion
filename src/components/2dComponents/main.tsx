@@ -50,7 +50,10 @@ const Live2DComponent = () => {
   const StartAudioLipSync = (url: string) => {
     LAppLive2DManager.getInstance().startLiveLipSync(url);
   };
-
+  const TestMotion = () => {
+    console.log("````````");
+    LAppLive2DManager.getInstance().TestMotion();
+  };
   const canvascleanUp = () => {
     // Clean up canvas if needed
     const canvas = document.getElementById("live2dCanvas") as HTMLCanvasElement;
@@ -127,6 +130,7 @@ const Live2DComponent = () => {
         <audio id="voice" autoFocus/>
         <ChatBox messages={messages} onSendMessage={handleSendMessage} isloading= {isLoading}/>
         {error && <p className="text-red-500 text-sm px-4 py-2">{error}</p>}
+        <button onClick={TestMotion}> Test Motion</button>
       </div>
     </>
   );
